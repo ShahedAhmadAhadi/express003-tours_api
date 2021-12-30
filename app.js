@@ -10,11 +10,6 @@ app.use(morgan("dev"))
 app.use(express.json())
 
 app.use((req, res, next) => {
-    console.log('MiddleWare')
-    next();
-})
-
-app.use((req, res, next) => {
     req.requestTime = new Date().toISOString();
     next();
 })
@@ -22,7 +17,4 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
 
-const port = 8001
-app.listen(port, ()=> {
-    console.log(`App running on port ${port}`)
-})
+module.exports = app
