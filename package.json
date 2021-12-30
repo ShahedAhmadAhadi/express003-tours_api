@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ShahedAhmadAhadi/tours_api#readme",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "morgan": "^1.10.0"
   }

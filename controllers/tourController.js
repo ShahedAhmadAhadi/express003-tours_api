@@ -11,8 +11,9 @@ exports.checkID = (req, res, next, value) => {
 
 exports.checkBody = (req, res, next) => {
     if (!req.body.name || !req.body.price) {
-        return res.status(400).json({status: 'Failed', message: 'Messing or Price'})
+        return res.status(400).json({status: 'Failed', message: 'Messing name or Price'})
     }
+    next()
 }
 
 exports.getAllTours = (req, res) => {
