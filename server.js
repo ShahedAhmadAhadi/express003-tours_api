@@ -11,6 +11,8 @@ mongoose.connect(DB, {
     // useFindAndModify: false,
 }).then(() => {
     console.log('db successfull')
+}).catch((error) => {
+    console.log('unsucessfull', error)
 })
 
 
