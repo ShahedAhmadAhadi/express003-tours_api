@@ -11,6 +11,6 @@ router.route('/tour-stats').get(authController.protect, tourController.getTourSt
 router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan)
 
 router.route('/').get(tourController.getAllTours).post(tourController.createTour)
-router.route('/:id').get(tourController.getTour).patch(tourController.updateTour).delete(authController.protect, authController.restrictTo('admin'), tourController.deleteTour)
+router.route('/:id').get(tourController.getTour).patch(tourController.updateTour).delete(authController.protect, authController.restrictTo('admin', 'lead-guide'), tourController.deleteTour)
 
 module.exports = router
