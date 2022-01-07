@@ -11,8 +11,7 @@ exports.aliasTopTours = async (req, res, next) => {
 
 exports.getAllTours = factory.getAll(Tour)
 
-exports.getTour = factory.getTour(Tour, populate({path: 'guides', select: '-__v -passwordChangedAt'}).populate('reviews'))
-
+exports.getTour = factory.getOne(Tour, { path: 'reviews' })
 
 exports.createTour = factory.createOne(Tour)
 
