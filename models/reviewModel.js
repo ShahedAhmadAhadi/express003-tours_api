@@ -27,6 +27,8 @@ const reviewSchema = new mongoose.Schema({
     toObject: {virtuals: true}
 })
 
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true })
+
 reviewSchema.pre(/^find/, function(next) {
     // this.populate({
     //     path: 'tour',
@@ -57,16 +59,34 @@ reviewSchema.statics.calcAverageRatings = async function(tourId) {
         }
     ])
 
-    await Tour.findByIdAndUpdate(tourId, {
-        ratingsQuantity: stats[0].nRatings,
-        ratingsAverage: stats[1].nRatings
-    })
+    if (stats.length > 0) {
+        await Tour.findByIdAndUpdate(tourId, {
+            ratingsQuantity: stats[0].nRatings,
+            ratingsAverage: stats[1].avgRatings
+        })
+    } else {
+        await Tour.findByIdAndUpdate(tourId, {
+            ratingsQuantity: 0,
+            ratingsAverage: 4.5
+        })
+    }
+
 
 }
 
 reviewSchema.post('save', function() {
     this.constructor.calcAverageRatings(this.tour)
 })
+
+reviewSchema.pre(/^findOneAnd/, async function(next) {
+    this.r = await this.findOne()
+    next()
+})
+
+reviewSchema.post(/^findOneAnd/, async function() {
+    await this.r.constructor.calcAverageRatings(this.r.tour)
+})
+
 
 const Review = mongoose.model('Review', reviewSchema)
 
