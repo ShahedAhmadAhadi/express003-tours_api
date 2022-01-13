@@ -32,14 +32,14 @@ const upload = multer({
 
 exports.uploadUserPhoto = upload.single('photo')
 
-exports.resizeUserPhoto = (req, res, next) => {
-    if (!req.body) return next()
+exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+    if (!req.file) return next()
 
     req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`
-    sharp(req.file.buffer).resize(500, 500).toFormat('jpeg').jpeg({quality: 90}).toFile(`public/img/users/${req.file.filename}`)
+    await sharp(req.file.buffer).resize(500, 500).toFormat('jpeg').jpeg({quality: 90}).toFile(`public/img/users/${req.file.filename}`)
 
     next()
-}
+})
 
 const filterObj = (obj, ...allowedFields) => {
     const newObj = {};
@@ -55,7 +55,6 @@ exports.getMe = (req, res, next) => {
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-    console.log(req.body)
     // 1) Create error if user POSTs password data
     if (req.body.password || req.body.passwordConfirm) {
         return next(
